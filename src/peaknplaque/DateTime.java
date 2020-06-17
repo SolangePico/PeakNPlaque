@@ -22,7 +22,7 @@ public class DateTime {
     /**
      * Boolean method, which returns us if it is at the allowed time.
      *
-     * @param time, it must to be in hh:mm.
+     * @param time, format(hh:mms).
      * @return isAllowHour or not.
      *
      */
@@ -31,20 +31,22 @@ public class DateTime {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
         try {
             Calendar calendar = Calendar.getInstance();
-            Date parsedDate = dateFormat.parse(time);
-            calendar.setTime(parsedDate);
+            Date parsedTime = dateFormat.parse(time);
+            calendar.setTime(parsedTime);
 
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int min = calendar.get(Calendar.MINUTE);
-            if ((hour >= 7 && min >= 00) && (hour <= 9 && min <= 30)) {
-                isAllowHour = false;
-            }
-            if ((hour >= 16 && min >= 00) && (hour <= 19 && min <= 30)) {
-                isAllowHour = false;
+            if ((hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19)) {
+                if (hour == 9 || hour == 19) {
+                    if (min >= 0 && min <= 30) {
+                        isAllowHour = false;
+                    }
+                } else {
+                    isAllowHour = false;
+                }
             }
         } catch (ParseException e) {
             System.err.println("invalid Hour Format");
-            e.printStackTrace();
         }
         return isAllowHour;
     }
